@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            // Aquí podríamos desencriptar el token o hacer una petición al backend para validar.
             // Por simplicidad en esta fase, simularemos que el usuario existe si hay token.
             setUser({ nombre: 'Administrador' }); 
         }
@@ -25,10 +24,22 @@ export const AuthProvider = ({ children }) => {
                 password
             });
             
+            // Inspeccionamos la respuesta para asegurar la estructura
+            console.log("Respuesta del login:", respuesta.data);
+
             const token = respuesta.data.token;
-            localStorage.setItem('token', token); // Guardamos el JWT en el Local Storage
-            setUser({ nombre: respuesta.data.usuario.nombre || 'Administrador' }); // Guardamos el usuario globalmente
-            return true;
+            
+            if (token) {
+                localStorage.setItem('token', token); // Guardamos el JWT
+                // Ajustamos la asignación del usuario basándonos en una estructura genérica segura
+                const nombreUsuario = respuesta.data.user?.nombre || 'Administrador'; 
+                setUser({ nombre: nombreUsuario }); 
+                return true;
+            } else {
+                console.error('El servidor no devolvió un token.');
+                return false;
+            }
+
         } catch (error) {
             console.error('Error en login:', error);
             return false;
