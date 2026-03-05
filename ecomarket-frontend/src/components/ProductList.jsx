@@ -10,16 +10,17 @@ export function ProductList() {
     useEffect(() => {
         const obtenerProductos = async () => {
             try {
+                // Asegúrate de que el puerto sea el 4000
                 const respuesta = await axios.get('http://localhost:4000/api/products');
-                console.log("Datos recibidos de la API:", respuesta.data);
                 setProductos(respuesta.data.data || respuesta.data);
             } catch (err) {
-                console.error("Error al obtener productos:", err);
-                setError("No se pudo conectar al backend. Mostrando datos de prueba.");
+                console.error("Error completo de Axios:", err);
+                setError("No se pudo conectar al backend. Revisa la consola.");
+                
+                // Fallback: Datos de prueba
                 setProductos([
                     { id: 1, nombre: 'Laptop Gamer (Prueba)', precio: 15000, stock: 8, imagen_url: null },
-                    { id: 2, nombre: 'Iphone 19 (Prueba)', precio: 100000, stock: 0, imagen_url: null },
-                    { id: 3, nombre: 'Audífonos Sony (Prueba)', precio: 2500, stock: 15, imagen_url: null }
+                    { id: 2, nombre: 'Iphone 19 (Prueba)', precio: 100000, stock: 0, imagen_url: null }
                 ]);
             } finally {
                 setCargando(false);
@@ -32,17 +33,15 @@ export function ProductList() {
     const styles = {
         grid: { display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', padding: '20px' },
         mensaje: { textAlign: 'center', color: '#94a3b8', marginTop: '50px' },
-        error: { textAlign: 'center', color: '#eab308', marginTop: '20px', padding: '10px', backgroundColor: '#332919', borderRadius: '5px' }
+        error: { textAlign: 'center', color: '#eab308', marginTop: '20px', padding: '10px', backgroundColor: '#332919' }
     };
 
-    if (cargando) {
-        return <h2 style={styles.mensaje}>Cargando catálogo desde la base de datos...</h2>;
-    }
+    if (cargando) return <h2 style={styles.mensaje}>Cargando catálogo...</h2>;
 
     return (
         <>
-            {error && <p style={styles.error}>⚠️ {error}</p>}
-            {(!productos || productos.length === 0) ? (
+            {error && <p style={styles.error}>{error}</p>}
+            {productos.length === 0 ? (
                 <h2 style={styles.mensaje}>No hay productos en la tienda aún.</h2>
             ) : (
                 <div style={styles.grid}>

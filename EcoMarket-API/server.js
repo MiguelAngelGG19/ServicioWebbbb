@@ -2,37 +2,39 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const path = require('path'); // <--- 1. NUEVO: Importar path
+const path = require('path');
 const { sequelize, testConnection } = require('./src/config/database');
-
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Importar Rutas
 const authRoutes = require('./src/routes/auth.routes');
-const productRoutes = require('./src/routes/product.routes'); // <--- 2. NUEVO: Importar rutas de productos
-
-// Importar Relaciones y Modelos (Para asegurar que Sequelize cree las tablas correctamente)
+const productRoutes = require('./src/routes/product.routes');
 require('./src/models/associations'); 
-const orderRoutes = require('./src/routes/order.routes'); // Importar rutas de órdenes
-
+const orderRoutes = require('./src/routes/order.routes');
 
 // 1. Middlewares (Configuración Global)
 app.use(helmet()); 
-app.use(cors());   
+
+// AQUI ESTA EL CAMBIO IMPORTANTE: CONFIGURACION DE CORS
+app.use(cors({
+    origin: 'http://localhost:5173', // Permite que React se conecte
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    credentials: true // Permite el envío de cookies/tokens
+}));
+
 app.use(express.json()); 
 
-// 2. CARPETA PÚBLICA DE IMÁGENES (Vital para ver las fotos)
-// Esto permite acceder a: http://localhost:4000/uploads/foto.jpg
+// 2. CARPETA PÚBLICA DE IMÁGENES
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // 3. RUTAS
 app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes); // <--- 5. NUEVO: Montar ruta de productos
-app.use('/api/orders', orderRoutes); // <-- NUEVA RUTA
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
 
-// 4. Ruta de Prueba (Health Check)
+// 4. Ruta de Prueba
 app.get('/', (req, res) => {
     res.json({
         status: "API Online",
@@ -45,8 +47,6 @@ app.get('/', (req, res) => {
 const startServer = async () => {
     try {
         await testConnection();
-        
-        // Sincronizar modelos (Crear tablas si no existen)
         await sequelize.sync({ force: false });
         console.log('📦 Tablas sincronizadas correctamente.');
 
@@ -54,7 +54,6 @@ const startServer = async () => {
             console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
         });
     } catch (error) {
-
         console.error('💀 Error fatal al iniciar el servicio:', error);
     }
 };
