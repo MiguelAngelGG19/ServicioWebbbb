@@ -31,5 +31,34 @@ function App() {
     </>
   )
 }
+export default function App() {
+    const appStyle = {
+        backgroundColor: '#0f172a',
+        minHeight: '100vh',
+        color: 'white',
+        display: 'flex',
+        flexDirection: 'column',
+        fontFamily: 'sans-serif'
+    };
+
+    return (
+        <div style={appStyle}>
+            {/* 1. Barra de Navegación */}
+            <Navbar />
+
+            {/* 2. Contenido Principal */}
+            <main style={{ padding: '20px', flex: 1 }}>
+                <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Catálogo de Productos</h2>
+                
+                {/* AHORA USAMOS EL COMPONENTE INTELIGENTE EN LUGAR DE LAS TARJETAS ESTÁTICAS */}
+                <ProductList />
+
+            </main>
+
+            {/* 3. Pie de página */}
+            <Footer />
+        </div>
+    );
+}
 
 export default App
