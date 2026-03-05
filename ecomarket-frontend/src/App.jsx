@@ -1,7 +1,11 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import { AuthProvider } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ProductList } from './components/ProductList';
+import { Login } from './pages/Login';
 
 export default function App() {
     const appStyle = {
@@ -14,13 +18,29 @@ export default function App() {
     };
 
     return (
-        <div style={appStyle}>
-            <Navbar />
-            <main style={{ padding: '20px', flex: 1 }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Catálogo de Productos</h2>
-                <ProductList />
-            </main>
-            <Footer />
-        </div>
+        <AuthProvider>
+            <BrowserRouter>
+                <div style={appStyle}>
+                    <Navbar />
+
+                    <main style={{ padding: '20px', flex: 1 }}>
+                        <Routes>
+                            {/* Ruta Principal: El catálogo */}
+                            <Route path="/" element={
+                                <>
+                                    <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Catálogo de Productos</h2>
+                                    <ProductList />
+                                </>
+                            } />
+                            
+                            {/* Ruta del Login */}
+                            <Route path="/login" element={<Login />} />
+                        </Routes>
+                    </main>
+
+                    <Footer />
+                </div>
+            </BrowserRouter>
+        </AuthProvider>
     );
 }
