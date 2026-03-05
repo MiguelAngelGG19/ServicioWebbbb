@@ -1,19 +1,16 @@
+// src/models/OrderItem.js
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 
 const OrderItem = sequelize.define('OrderItem', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
+    // Quitamos el ID autoincremental, Sequelize usará una clave primaria compuesta
+    // formada por OrderId y ProductId gracias a las asociaciones.
     cantidad: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 1
     },
     precio_unitario: { 
-        // Importante: Guardamos el precio al momento de la compra [cite: 688]
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
     }

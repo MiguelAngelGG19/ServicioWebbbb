@@ -1,3 +1,5 @@
+import React from 'react';
+
 export function ProductCard({ producto }) {
     const styles = {
         card: {
