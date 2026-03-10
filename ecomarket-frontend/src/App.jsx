@@ -6,6 +6,7 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ProductList } from './components/ProductList';
 import { Login } from './pages/Login';
+import { Register } from './pages/Register';
 
 export default function App() {
     const appStyle = {
@@ -35,6 +36,7 @@ export default function App() {
                             
                             {/* Ruta del Login */}
                             <Route path="/login" element={<Login />} />
+                            <Route path="/registro" element={<Register />} />
                         </Routes>
                     </main>
 

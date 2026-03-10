@@ -1,25 +1,16 @@
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-export function Login() {
+export function Register() {
+    const [nombre, setNombre] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
-    
-    // Traemos la función login de nuestro contexto global
-    const { login } = useContext(AuthContext);
-    const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        // Llamamos a la API a través del Contexto
-        const exito = await login(email, password);
-        if (exito) {
-            navigate('/'); // Si es correcto, lo mandamos al catálogo
-        } else {
-            setError('Credenciales incorrectas o error de red');
-        }
+        // En la siguiente fase conectaremos esto al endpoint /api/auth/registro
+        console.log("Datos de registro:", { nombre, email, password });
+        alert("Simulación de registro exitoso. Ya puedes iniciar sesión.");
     };
 
     const styles = {
@@ -27,16 +18,24 @@ export function Login() {
         card: { backgroundColor: '#1e293b', padding: '30px', borderRadius: '8px', width: '350px', border: '1px solid #334155' },
         title: { textAlign: 'center', color: 'white', marginBottom: '20px' },
         input: { width: '100%', padding: '10px', marginBottom: '15px', borderRadius: '4px', border: '1px solid #475569', backgroundColor: '#0f172a', color: 'white', boxSizing: 'border-box' },
-        button: { width: '100%', padding: '10px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' },
-        error: { color: '#ef4444', textAlign: 'center', marginBottom: '10px', fontSize: '0.9rem' }
+        button: { width: '100%', padding: '10px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', marginBottom: '15px' },
+        linkText: { color: '#94a3b8', textAlign: 'center', fontSize: '0.9rem', display: 'block' },
+        link: { color: '#3b82f6', textDecoration: 'none', fontWeight: 'bold' }
     };
 
     return (
         <div style={styles.container}>
             <div style={styles.card}>
-                <h2 style={styles.title}>Iniciar Sesión</h2>
-                {error && <p style={styles.error}>{error}</p>}
+                <h2 style={styles.title}>Crear Cuenta</h2>
                 <form onSubmit={handleSubmit}>
+                    <input 
+                        type="text" 
+                        placeholder="Nombre completo" 
+                        style={styles.input} 
+                        value={nombre} 
+                        onChange={(e) => setNombre(e.target.value)} 
+                        required 
+                    />
                     <input 
                         type="email" 
                         placeholder="Correo electrónico" 
@@ -53,10 +52,10 @@ export function Login() {
                         onChange={(e) => setPassword(e.target.value)} 
                         required 
                     />
-                    <button type="submit" style={styles.button}>Entrar</button>
+                    <button type="submit" style={styles.button}>Registrarse</button>
                 </form>
-                <span style={{ color: '#94a3b8', textAlign: 'center', fontSize: '0.9rem', display: 'block', marginTop: '15px' }}>
-                    ¿No tienes cuenta? <Link to="/registro" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 'bold' }}>Regístrate aquí</Link>
+                <span style={styles.linkText}>
+                    ¿Ya tienes cuenta? <Link to="/login" style={styles.link}>Entrar aquí</Link>
                 </span>
             </div>
         </div>
