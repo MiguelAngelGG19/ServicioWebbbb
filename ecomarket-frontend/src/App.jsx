@@ -1,12 +1,15 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+// TODAS LAS IMPORTACIONES CON LLAVES (Porque usaste "export function")
 import { AuthProvider } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ProductList } from './components/ProductList';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
+import { Perfil } from './pages/Perfil';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 export default function App() {
     const appStyle = {
@@ -34,9 +37,19 @@ export default function App() {
                                 </>
                             } />
                             
-                            {/* Ruta del Login */}
+                            {/* Rutas de Autenticación */}
                             <Route path="/login" element={<Login />} />
                             <Route path="/registro" element={<Register />} />
+                            
+                            {/* RUTA PROTEGIDA (El Cadenero) */}
+                            <Route 
+                                path="/perfil" 
+                                element={
+                                    <ProtectedRoute>
+                                        <Perfil />
+                                    </ProtectedRoute>
+                                } 
+                            />
                         </Routes>
                     </main>
 
