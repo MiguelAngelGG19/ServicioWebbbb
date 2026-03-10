@@ -2,15 +2,18 @@ import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
-// Este componente recibe otro componente como "hijo" (children)
 export function ProtectedRoute({ children }) {
-    const { user } = useContext(AuthContext);
+    const { user, cargandoSesion } = useContext(AuthContext);
 
-    // Si NO hay usuario en sesión, lo redirige a la página de login
+    // Si todavía está buscando el token, mostramos una pantalla de espera
+    if (cargandoSesion) {
+        return <div style={{ textAlign: 'center', marginTop: '50px', color: 'white' }}>Verificando seguridad...</div>;
+    }
+
+    // Si ya terminó de buscar y NO hay usuario, lo saca
     if (!user) {
         return <Navigate to="/login" replace />;
     }
 
-    // Si SÍ hay usuario, lo deja pasar y muestra el contenido original
     return children;
 }

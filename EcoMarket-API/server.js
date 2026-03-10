@@ -15,7 +15,7 @@ require('./src/models/associations');
 const orderRoutes = require('./src/routes/order.routes');
 
 // 1. Middlewares (Configuración Global)
-app.use(helmet()); 
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
 // AQUI ESTA EL CAMBIO IMPORTANTE: CONFIGURACION DE CORS
 app.use(cors({

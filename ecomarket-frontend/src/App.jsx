@@ -1,11 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-// TODAS LAS IMPORTACIONES CON LLAVES (Porque usaste "export function")
 import { AuthProvider } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
-import { ProductList } from './components/ProductList';
+import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Perfil } from './pages/Perfil';
@@ -29,26 +27,16 @@ export default function App() {
 
                     <main style={{ padding: '20px', flex: 1 }}>
                         <Routes>
-                            {/* Ruta Principal: El catálogo */}
-                            <Route path="/" element={
-                                <>
-                                    <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Catálogo de Productos</h2>
-                                    <ProductList />
-                                </>
-                            } />
-                            
-                            {/* Rutas de Autenticación */}
+                            <Route path="/" element={<Home />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/registro" element={<Register />} />
-                            
-                            {/* RUTA PROTEGIDA (El Cadenero) */}
-                            <Route 
-                                path="/perfil" 
+                            <Route
+                                path="/perfil"
                                 element={
                                     <ProtectedRoute>
                                         <Perfil />
                                     </ProtectedRoute>
-                                } 
+                                }
                             />
                         </Routes>
                     </main>
