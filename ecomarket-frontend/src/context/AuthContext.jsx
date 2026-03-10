@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 
         } catch (error) {
             console.error('Error en login:', error);
-            return false; // Falló el login (credenciales incorrectas, error de red, etc.)
+            return false; // Falló el login
         }
     };
 
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
         setUser(null); // Eliminamos al usuario de la memoria de React
     };
 
-    // 3. Retornamos el Proveedor, pasando las variables y funciones a las que los demás componentes tendrán acceso
+    // 3. Retornamos el Proveedor
     return (
         <AuthContext.Provider value={{ user, login, logout }}>
             {children}
