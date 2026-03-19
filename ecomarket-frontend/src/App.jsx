@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';  
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -13,6 +14,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
+    
+    <AuthProvider>
+    
     <CartProvider>
       <BrowserRouter>
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -56,6 +60,7 @@ function App() {
         </div>
       </BrowserRouter>
     </CartProvider>
+    </AuthProvider>
   );
 }
 
