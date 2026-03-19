@@ -1,19 +1,18 @@
-import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
 
-export function ProtectedRoute({ children }) {
-    const { user, cargandoSesion } = useContext(AuthContext);
+function ProtectedRoute({ children, requiredRole = null }) {
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-    // Si todavía está buscando el token, mostramos una pantalla de espera
-    if (cargandoSesion) {
-        return <div style={{ textAlign: 'center', marginTop: '50px', color: 'white' }}>Verificando seguridad...</div>;
-    }
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
 
-    // Si ya terminó de buscar y NO hay usuario, lo saca
-    if (!user) {
-        return <Navigate to="/login" replace />;
-    }
+  if (requiredRole && user.rol !== requiredRole) {
+    return <Navigate to="/" />;
+  }
 
-    return children;
+  return children;
 }
+
+export default ProtectedRoute;
