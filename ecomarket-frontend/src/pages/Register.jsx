@@ -29,7 +29,7 @@ export default function Register() {
     };
 
     const styles = {
-        container: { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' },
+       container: { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh', backgroundColor: '#0f172a' },
         card: { backgroundColor: '#1e293b', padding: '30px', borderRadius: '8px', width: '350px', border: '1px solid #334155' },
         title: { textAlign: 'center', color: 'white', marginBottom: '20px' },
         input: { width: '100%', padding: '10px', marginBottom: '15px', borderRadius: '4px', border: '1px solid #475569', backgroundColor: '#0f172a', color: 'white', boxSizing: 'border-box' },
