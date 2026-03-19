@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import { CartContext } from '../context/CartContext';
 
 function Cart() {
@@ -13,9 +14,15 @@ function Cart() {
 
   const handleCheckout = async () => {
     if (cart.length === 0) {
-      alert('El carrito está vacío');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Carrito vacío',
+        text: 'Agrega productos antes de pagar.',
+        confirmButtonColor: '#3483fa'
+      });
       return;
     }
+
     setProcesando(true);
     try {
       const payload = {
@@ -24,14 +31,26 @@ function Cart() {
       const respuesta = await axios.post('http://localhost:4000/api/orders', payload, {
         headers: { Authorization: `Bearer ${token}` }
       });
+
       if (respuesta.data.success) {
-        alert(`✅ ¡Compra exitosa! Tu número de orden es: #${respuesta.data.orderId}`);
         clearCart();
+        await Swal.fire({
+          icon: 'success',
+          title: '¡Compra exitosa! 🎉',
+          html: `Tu número de orden es: <strong>#${respuesta.data.orderId}</strong>`,
+          confirmButtonColor: '#3483fa',
+          confirmButtonText: 'Ver mis compras'
+        });
         navigate('/mis-compras');
       }
     } catch (error) {
       console.error(error);
-      alert('❌ Error procesando la compra: ' + (error.response?.data?.error || 'Error de servidor'));
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en la compra',
+        text: error.response?.data?.error || 'Error de servidor. Intenta de nuevo.',
+        confirmButtonColor: '#3483fa'
+      });
     } finally {
       setProcesando(false);
     }
@@ -54,48 +73,34 @@ function Cart() {
             Tu carrito está vacío
           </p>
           <Link to="/" style={{
-            display: 'inline-block',
-            padding: '12px 28px',
-            backgroundColor: '#3483fa',
-            color: 'white',
-            textDecoration: 'none',
-            borderRadius: 8,
-            fontWeight: 'bold',
-            fontSize: '1rem'
+            display: 'inline-block', padding: '12px 28px',
+            backgroundColor: '#3483fa', color: 'white',
+            textDecoration: 'none', borderRadius: 8, fontWeight: 'bold'
           }}>
             🛍️ Ir al catálogo
           </Link>
         </div>
       ) : (
         <>
-          {/* LISTA DE PRODUCTOS */}
+          {/* LISTA */}
           <div style={{
-            backgroundColor: '#fff',
-            border: '1px solid #e5e7eb',
-            borderRadius: 12,
-            overflow: 'hidden',
+            backgroundColor: '#fff', border: '1px solid #e5e7eb',
+            borderRadius: 12, overflow: 'hidden',
             boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
           }}>
             {cart.map((item, index) => (
               <div key={index} style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '16px 20px',
-                borderBottom: index === cart.length - 1 ? 'none' : '1px solid #f3f4f6',
-                transition: 'background 0.2s'
+                display: 'flex', justifyContent: 'space-between',
+                alignItems: 'center', padding: '16px 20px',
+                borderBottom: index === cart.length - 1 ? 'none' : '1px solid #f3f4f6'
               }}>
-                {/* ÍCONO + INFO */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 1 }}>
                   <div style={{
                     width: 48, height: 48, borderRadius: 8,
-                    backgroundColor: '#eff6ff',
-                    display: 'flex', alignItems: 'center',
-                    justifyContent: 'center', fontSize: '1.5rem',
-                    flexShrink: 0
-                  }}>
-                    📦
-                  </div>
+                    backgroundColor: '#eff6ff', display: 'flex',
+                    alignItems: 'center', justifyContent: 'center',
+                    fontSize: '1.5rem', flexShrink: 0
+                  }}>📦</div>
                   <div>
                     <h4 style={{ margin: '0 0 4px 0', color: '#1a1a2e', fontSize: '0.95rem' }}>
                       {item.nombre}
@@ -105,12 +110,7 @@ function Cart() {
                     </p>
                   </div>
                 </div>
-
-                {/* PRECIO */}
-                <div style={{
-                  fontWeight: '800', fontSize: '1.1rem',
-                  color: '#3483fa', minWidth: 120, textAlign: 'right'
-                }}>
+                <div style={{ fontWeight: '800', fontSize: '1.1rem', color: '#3483fa', minWidth: 120, textAlign: 'right' }}>
                   ${(item.precio * item.cantidad).toLocaleString()}
                 </div>
               </div>
@@ -119,9 +119,8 @@ function Cart() {
 
           {/* RESUMEN */}
           <div style={{
-            backgroundColor: '#fff', padding: 24,
-            marginTop: 20, borderRadius: 12,
-            border: '2px solid #3483fa',
+            backgroundColor: '#fff', padding: 24, marginTop: 20,
+            borderRadius: 12, border: '2px solid #3483fa',
             boxShadow: '0 4px 16px rgba(52,131,250,0.1)'
           }}>
             <h3 style={{ margin: '0 0 20px 0', color: '#1a1a2e', fontSize: '1.1rem' }}>
@@ -132,16 +131,13 @@ function Cart() {
               <span style={{ color: '#555' }}>Subtotal ({cart.length} producto{cart.length > 1 ? 's' : ''}):</span>
               <span style={{ color: '#333', fontWeight: '600' }}>${totalCarrito.toLocaleString()}</span>
             </div>
-
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
               <span style={{ color: '#555' }}>Envío:</span>
               <span style={{ color: '#10b981', fontWeight: '600' }}>✅ Gratis</span>
             </div>
-
             <div style={{
               display: 'flex', justifyContent: 'space-between',
-              paddingTop: 16, borderTop: '2px solid #e5e7eb',
-              marginBottom: 24
+              paddingTop: 16, borderTop: '2px solid #e5e7eb', marginBottom: 24
             }}>
               <span style={{ fontSize: '1.2rem', fontWeight: '800', color: '#1a1a2e' }}>Total:</span>
               <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#3483fa' }}>
@@ -149,35 +145,22 @@ function Cart() {
               </span>
             </div>
 
-            {/* BOTONES */}
             <div style={{ display: 'flex', gap: 12 }}>
               <Link to="/" style={{
-                flex: 1, padding: '13px',
-                backgroundColor: '#f3f4f6',
-                color: '#555',
-                textDecoration: 'none',
-                borderRadius: 8,
-                fontWeight: 'bold',
-                textAlign: 'center',
-                fontSize: '0.95rem',
-                border: '1px solid #e5e7eb'
+                flex: 1, padding: '13px', backgroundColor: '#f3f4f6',
+                color: '#555', textDecoration: 'none', borderRadius: 8,
+                fontWeight: 'bold', textAlign: 'center', border: '1px solid #e5e7eb'
               }}>
                 ← Seguir comprando
               </Link>
-              <button
-                onClick={handleCheckout}
-                disabled={procesando}
-                style={{
-                  flex: 1, padding: '13px',
-                  backgroundColor: procesando ? '#93c5fd' : '#3483fa',
-                  color: 'white',
-                  border: 'none', borderRadius: 8,
-                  fontWeight: 'bold', fontSize: '1rem',
-                  cursor: procesando ? 'not-allowed' : 'pointer',
-                  boxShadow: procesando ? 'none' : '0 4px 12px rgba(52,131,250,0.4)',
-                  transition: 'all 0.2s'
-                }}
-              >
+              <button onClick={handleCheckout} disabled={procesando} style={{
+                flex: 1, padding: '13px',
+                backgroundColor: procesando ? '#93c5fd' : '#3483fa',
+                color: 'white', border: 'none', borderRadius: 8,
+                fontWeight: 'bold', fontSize: '1rem',
+                cursor: procesando ? 'not-allowed' : 'pointer',
+                boxShadow: procesando ? 'none' : '0 4px 12px rgba(52,131,250,0.4)'
+              }}>
                 {procesando ? '⏳ Procesando...' : '💳 Pagar Ahora'}
               </button>
             </div>
