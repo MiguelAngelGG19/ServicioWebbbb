@@ -13,7 +13,8 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         const savedUser = localStorage.getItem('user');
         if (token && savedUser) {
-            setUser(JSON.parse(savedUser));
+        // eslint-disable-next-line
+        setUser(JSON.parse(savedUser));
         }
     }, []);
 

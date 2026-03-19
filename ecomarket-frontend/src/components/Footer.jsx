@@ -1,20 +1,13 @@
 export default function Footer() {
     return (
-        <footer style={{
-            backgroundColor: '#1a1a2e',
-            color: '#aaa',
-            padding: '40px 24px 20px'
-        }}>
+        <footer style={{ backgroundColor: '#1a1a2e', color: '#aaa', padding: '40px 24px 20px' }}>
             <div style={{
-                maxWidth: 1200,
-                margin: '0 auto',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: 40,
-                marginBottom: 30
+                maxWidth: 1200, margin: '0 auto',
+                display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: 40, marginBottom: 30
             }}>
                 <div>
-                    <h3 style={{ color: '#FFE600', marginTop: 0 }}>🌿 EcoMarket</h3>
+                    <h3 style={{ color: '#3483fa', marginTop: 0 }}>🌿 EcoMarket</h3>
                     <p style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>
                         Tu tienda online de confianza. Productos de calidad con envío rápido.
                     </p>
@@ -36,13 +29,8 @@ export default function Footer() {
                     </p>
                 </div>
             </div>
-            <div style={{
-                borderTop: '1px solid #333',
-                paddingTop: 20,
-                textAlign: 'center',
-                fontSize: '0.85rem'
-            }}>
-                © 2026 EcoMarket API. Todos los derechos reservados.
+            <div style={{ borderTop: '1px solid #2a2a4a', paddingTop: 20, textAlign: 'center', fontSize: '0.85rem' }}>
+                © 2026 EcoMarket. Todos los derechos reservados. — Hecho con 💙 en México
             </div>
         </footer>
     );

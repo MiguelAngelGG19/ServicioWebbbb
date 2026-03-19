@@ -10,42 +10,62 @@ export function ProductList() {
     useEffect(() => {
         const obtenerProductos = async () => {
             try {
-                // Asegúrate de que el puerto sea el 4000
                 const respuesta = await axios.get('http://localhost:4000/api/products');
                 setProductos(respuesta.data.data || respuesta.data);
             } catch (err) {
-                console.error("Error completo de Axios:", err);
-                setError("No se pudo conectar al backend. Revisa la consola.");
-                
-                // Fallback: Datos de prueba
+                setError('No se pudo conectar al servidor.');
                 setProductos([
-                    { id: 1, nombre: 'Laptop Gamer (Prueba)', precio: 15000, stock: 8, imagen_url: null },
-                    { id: 2, nombre: 'Iphone 19 (Prueba)', precio: 100000, stock: 0, imagen_url: null }
+                    { id: 1, nombre: 'Laptop Gamer (Demo)', precio: 15000, stock: 8, imagen_url: null },
+                    { id: 2, nombre: 'iPhone 19 Pro (Demo)', precio: 25000, stock: 0, imagen_url: null },
+                    { id: 3, nombre: 'Audífonos Sony (Demo)', precio: 2500, stock: 3, imagen_url: null },
                 ]);
             } finally {
                 setCargando(false);
             }
         };
-
         obtenerProductos();
     }, []);
 
-    const styles = {
-        grid: { display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', padding: '20px' },
-        mensaje: { textAlign: 'center', color: '#94a3b8', marginTop: '50px' },
-        error: { textAlign: 'center', color: '#eab308', marginTop: '20px', padding: '10px', backgroundColor: '#332919' }
-    };
-
-    if (cargando) return <h2 style={styles.mensaje}>Cargando catálogo...</h2>;
+    if (cargando) return (
+        <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+            <div style={{
+                display: 'inline-block',
+                width: 48, height: 48,
+                border: '5px solid #f0f0f0',
+                borderTop: '5px solid #FFE600',
+                borderRadius: '50%',
+                animation: 'spin 0.8s linear infinite',
+                marginBottom: 16
+            }} />
+            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            <p style={{ color: '#888', fontSize: '1rem' }}>Cargando productos...</p>
+        </div>
+    );
 
     return (
         <>
-            {error && <p style={styles.error}>{error}</p>}
+            {error && (
+                <div style={{
+                    backgroundColor: '#fef3c7', border: '1px solid #fcd34d',
+                    color: '#92400e', padding: '12px 16px', borderRadius: 8,
+                    marginBottom: 20, fontSize: '0.9rem', display: 'flex',
+                    alignItems: 'center', gap: 8
+                }}>
+                    ⚠️ {error} Mostrando productos de demo.
+                </div>
+            )}
             {productos.length === 0 ? (
-                <h2 style={styles.mensaje}>No hay productos en la tienda aún.</h2>
+                <div style={{ textAlign: 'center', padding: 60 }}>
+                    <p style={{ fontSize: '3rem' }}>🏪</p>
+                    <p style={{ color: '#888' }}>No hay productos disponibles aún.</p>
+                </div>
             ) : (
-                <div style={styles.grid}>
-                    {productos.map((prod) => (
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
+                    gap: 24
+                }}>
+                    {productos.map(prod => (
                         <ProductCard key={prod.id} producto={prod} />
                     ))}
                 </div>

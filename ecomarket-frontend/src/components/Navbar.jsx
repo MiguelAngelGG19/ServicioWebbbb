@@ -17,13 +17,13 @@ export default function Navbar() {
 
   return (
     <nav style={{
-      backgroundColor: '#FFE600',
+      backgroundColor: '#3483fa',
       padding: '0 24px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      height: 60,
-      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+      height: 64,
+      boxShadow: '0 2px 8px rgba(52,131,250,0.4)',
       position: 'sticky',
       top: 0,
       zIndex: 100
@@ -32,25 +32,22 @@ export default function Navbar() {
       <Link to="/" style={{
         fontWeight: '900',
         fontSize: '1.4rem',
-        color: '#333',
+        color: 'white',
         textDecoration: 'none',
-        letterSpacing: '-0.5px'
+        letterSpacing: '-0.5px',
+        whiteSpace: 'nowrap'
       }}>
         🌿 EcoMarket
       </Link>
 
-      {/* BARRA DE BÚSQUEDA FALSA (estética) */}
-      <div style={{
-        flex: 1,
-        maxWidth: 500,
-        margin: '0 30px'
-      }}>
+      {/* BARRA DE BÚSQUEDA */}
+      <div style={{ flex: 1, maxWidth: 500, margin: '0 30px' }}>
         <div style={{
           display: 'flex',
           backgroundColor: '#fff',
-          borderRadius: 4,
+          borderRadius: 6,
           overflow: 'hidden',
-          border: '1px solid #ccc'
+          border: '2px solid rgba(255,255,255,0.3)'
         }}>
           <input
             type="text"
@@ -65,11 +62,11 @@ export default function Navbar() {
           />
           <button style={{
             padding: '8px 16px',
-            backgroundColor: '#FFE600',
+            backgroundColor: '#2968c8',
             border: 'none',
-            borderLeft: '1px solid #ccc',
             cursor: 'pointer',
-            fontSize: '1rem'
+            fontSize: '1rem',
+            color: 'white'
           }}>🔍</button>
         </div>
       </div>
@@ -78,9 +75,8 @@ export default function Navbar() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
         {token ? (
           <>
-            {/* CARRITO */}
             <Link to="/carrito" style={{
-              color: '#333',
+              color: 'white',
               textDecoration: 'none',
               display: 'flex',
               flexDirection: 'column',
@@ -94,13 +90,11 @@ export default function Navbar() {
               {totalItems > 0 && (
                 <span style={{
                   position: 'absolute',
-                  top: -4,
-                  right: -8,
+                  top: -4, right: -8,
                   backgroundColor: '#e53e3e',
                   color: 'white',
                   borderRadius: '50%',
-                  width: 18,
-                  height: 18,
+                  width: 18, height: 18,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -112,55 +106,41 @@ export default function Navbar() {
               )}
             </Link>
 
-            {/* MIS COMPRAS */}
             <Link to="/mis-compras" style={{
-              color: '#333',
-              textDecoration: 'none',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              fontSize: '0.75rem',
-              fontWeight: 'bold'
+              color: 'white', textDecoration: 'none',
+              display: 'flex', flexDirection: 'column',
+              alignItems: 'center', fontSize: '0.75rem', fontWeight: 'bold'
             }}>
               <span style={{ fontSize: '1.4rem' }}>📦</span>
               <span>Mis Compras</span>
             </Link>
 
-            {/* ADMIN */}
             {user.rol === 'admin' && (
               <Link to="/admin" style={{
-                color: '#333',
-                textDecoration: 'none',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                fontSize: '0.75rem',
-                fontWeight: 'bold'
+                color: 'white', textDecoration: 'none',
+                display: 'flex', flexDirection: 'column',
+                alignItems: 'center', fontSize: '0.75rem', fontWeight: 'bold'
               }}>
                 <span style={{ fontSize: '1.4rem' }}>⚙️</span>
                 <span>Admin</span>
               </Link>
             )}
 
-            {/* USUARIO + LOGOUT */}
             <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              fontSize: '0.75rem',
-              fontWeight: 'bold',
-              color: '#333'
+              display: 'flex', flexDirection: 'column',
+              alignItems: 'center', fontSize: '0.75rem',
+              fontWeight: 'bold', color: 'white'
             }}>
               <span style={{ fontSize: '1.4rem' }}>👤</span>
               <span>{user.nombre?.split(' ')[0] || 'Mi Cuenta'}</span>
             </div>
 
             <button onClick={handleLogout} style={{
-              backgroundColor: '#333',
-              color: '#FFE600',
+              backgroundColor: 'white',
+              color: '#3483fa',
               border: 'none',
-              borderRadius: 4,
-              padding: '6px 14px',
+              borderRadius: 6,
+              padding: '7px 16px',
               fontWeight: 'bold',
               cursor: 'pointer',
               fontSize: '0.85rem'
@@ -171,18 +151,16 @@ export default function Navbar() {
         ) : (
           <>
             <Link to="/register" style={{
-              color: '#333',
-              fontWeight: 'bold',
-              textDecoration: 'none',
-              fontSize: '0.9rem'
+              color: 'white', fontWeight: 'bold',
+              textDecoration: 'none', fontSize: '0.9rem'
             }}>
               Crear cuenta
             </Link>
             <Link to="/login" style={{
-              backgroundColor: '#333',
-              color: '#FFE600',
+              backgroundColor: 'white',
+              color: '#3483fa',
               padding: '7px 16px',
-              borderRadius: 4,
+              borderRadius: 6,
               fontWeight: 'bold',
               textDecoration: 'none',
               fontSize: '0.9rem'
