@@ -12,7 +12,7 @@ exports.createProduct = async (req, res) => {
         const newProduct = await Product.create({
             nombre, precio, stock, descripcion: description, imagen_url, CategoryId
         });
-        res.status(201).json(newProduct);
+        res.status(201).json({ success: true, data: newProduct });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

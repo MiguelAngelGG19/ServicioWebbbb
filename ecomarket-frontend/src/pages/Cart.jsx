@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; 
 import axios from 'axios';
 import { CartContext } from '../context/CartContext';
 
@@ -141,20 +141,18 @@ function Cart() {
 
             {/* BOTONES */}
             <div style={{ display: 'flex', gap: 15, marginTop: 20 }}>
-              <a href="/" style={{
-                flex: 1,
-                padding: '12px',
-                backgroundColor: '#e5e7eb',
-                color: '#333',
-                textDecoration: 'none',
-                borderRadius: 6,
-                fontWeight: 'bold',
-                textAlign: 'center',
-                cursor: 'pointer',
-                border: 'none'
-              }}>
-                ← Seguir comprando
-              </a>
+              <Link to="/" style={{
+    flex: 1,
+    padding: '12px',
+    backgroundColor: '#e5e7eb',
+    color: '#333',
+    textDecoration: 'none',
+    borderRadius: 6,
+    fontWeight: 'bold',
+    textAlign: 'center'
+}}>
+    ← Seguir comprando
+</Link>
               <button
                 onClick={handleCheckout}
                 disabled={procesando}

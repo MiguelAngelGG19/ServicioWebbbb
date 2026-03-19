@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 
+// eslint-disable-next-line
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {

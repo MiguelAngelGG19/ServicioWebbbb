@@ -1,6 +1,8 @@
 import { createContext, useState } from 'react';
 
+// eslint-disable-next-line
 export const CartContext = createContext(null);
+
 
 export function CartProvider({ children }) {
     const [cart, setCart] = useState([]);

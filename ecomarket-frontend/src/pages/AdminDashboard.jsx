@@ -62,10 +62,10 @@ function AdminDashboard() {
       });
 
       if (res.data.success) {
-        setMensaje('✅ Producto subido correctamente');
-        setForm({ nombre: '', precio: '', stock: '', descripcion: '', CategoryId: 1 });
-        setImagen(null);
-        cargarProductos();
+        setMensaje(`✅ Producto "${res.data.nombre}" subido correctamente`);
+setForm({ nombre: '', precio: '', stock: '', descripcion: '', CategoryId: 1 });
+setImagen(null);
+cargarProductos();
       }
     } catch (error) {
       setMensaje('❌ Error: ' + (error.response?.data?.error || 'Error de servidor'));
