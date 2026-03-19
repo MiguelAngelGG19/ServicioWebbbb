@@ -1,6 +1,7 @@
 import React from 'react';
 
-export function Perfil() {
+// ✅ Agrega "default"
+export default function Perfil() {
     return (
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
             <h2 style={{ color: '#3b82f6' }}>Mi Perfil Privado</h2>
