@@ -1,10 +1,11 @@
 import React from 'react';
 import { ProductList } from '../components/ProductList';
 
-export function Home() {
+// ✅ export default
+export default function Home() {
     return (
-        <div>
-            <h2 style={{ textAlign: 'center', marginBottom: '30px', color: 'white' }}>
+        <div style={{ backgroundColor: '#f9fafb', minHeight: '100vh' }}>
+            <h2 style={{ textAlign: 'center', padding: '30px 0 10px', color: '#333' }}>
                 Catálogo de Productos
             </h2>
             <ProductList />
