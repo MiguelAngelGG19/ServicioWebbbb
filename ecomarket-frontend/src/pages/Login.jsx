@@ -56,7 +56,7 @@ export default function Login() {
                 </form>
                 <span style={styles.linkText}>
                     ¿No tienes cuenta?{' '}
-                    <Link to="/registro" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 'bold' }}>
+                    <Link to="/register" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 'bold' }}>
                         Regístrate aquí
                     </Link>
                 </span>
