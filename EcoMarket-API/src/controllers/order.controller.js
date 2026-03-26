@@ -12,7 +12,8 @@ const createOrder = async (req, res) => {
         const productosParaOrden = []; 
 
         for (const item of items) {
-            const productoDB = await Product.findByPk(item.productId, { transaction: t });
+            const productoDB = await Product.findByPk(item.productoId || item.productId, { transaction: t });
+
             
             if (!productoDB) {
                 throw new Error(`Producto con ID ${item.productId} no encontrado`);
