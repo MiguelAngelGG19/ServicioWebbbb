@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-
-const API_URL = 'http://192.168.1.4:4000';
+import { api } from '../config';
 
 export default function MyOrdersScreen() {
     const [ordenes, setOrdenes] = useState([]);
@@ -14,7 +12,7 @@ export default function MyOrdersScreen() {
         try {
             const token = await AsyncStorage.getItem('userToken');
             if (!token) { Alert.alert('Error', 'No hay sesión activa'); return; }
-            const respuesta = await axios.get(`${API_URL}/api/orders/mis-compras`, {
+            const respuesta = await api.get('/api/orders/mis-compras', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setOrdenes(respuesta.data);

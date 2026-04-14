@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-
-const API_URL = 'http://192.168.1.4:4000';
+import { api } from '../config';
 
 export default function CheckoutScreen({ route, navigation }) {
     const { productoSeleccionado } = route.params;
@@ -18,8 +16,8 @@ export default function CheckoutScreen({ route, navigation }) {
                 navigation.replace('Login');
                 return;
             }
-            const respuesta = await axios.post(
-                `${API_URL}/api/orders`,
+            const respuesta = await api.post(
+                '/api/orders',
                 { items: [{ productoId: productoSeleccionado.id, cantidad: 1 }] },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

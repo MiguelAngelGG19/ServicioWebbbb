@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-
-const API_URL = 'http://192.168.1.4:4000';
+import { api, API_URL } from '../config';
 
 export default function CatalogScreen({ navigation }) {
     const [productos, setProductos] = useState([]);
@@ -12,10 +10,10 @@ export default function CatalogScreen({ navigation }) {
     useEffect(() => {
         const obtenerProductos = async () => {
             try {
-                const respuesta = await axios.get(`${API_URL}/api/products`);
+                const respuesta = await api.get('/api/products');
                 setProductos(respuesta.data.data || respuesta.data);
             } catch (error) {
-                console.error('Error:', error.message);
+                console.error('Error al cargar productos:', error.message);
             } finally {
                 setCargando(false);
             }
