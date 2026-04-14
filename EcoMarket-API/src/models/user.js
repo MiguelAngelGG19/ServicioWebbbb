@@ -15,9 +15,9 @@ const User = sequelize.define('User', {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true, // No permitir correos repetidos
+        unique: true,
         validate: {
-            isEmail: true // Validación automática de formato email
+            isEmail: true
         }
     },
     password: {
@@ -31,9 +31,17 @@ const User = sequelize.define('User', {
 }, {
     hooks: {
         // HOOK: Antes de crear el usuario, encriptamos la clave
+        // saltRounds: 8 en desarrollo (rápido), usar 12 en producción
         beforeCreate: async (user) => {
-            const salt = await bcrypt.genSalt(10);
+            const salt = await bcrypt.genSalt(8);
             user.password = await bcrypt.hash(user.password, salt);
+        },
+        // HOOK: Antes de actualizar, re-encriptar si cambia la contraseña
+        beforeUpdate: async (user) => {
+            if (user.changed('password')) {
+                const salt = await bcrypt.genSalt(8);
+                user.password = await bcrypt.hash(user.password, salt);
+            }
         }
     }
 });
