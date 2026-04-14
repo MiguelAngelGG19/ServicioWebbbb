@@ -75,7 +75,7 @@ const startServer = async () => {
 
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-            console.log(`🌐 Accesible en red local: http://10.92.137.129:${PORT}`);
+            console.log(`🌐 Accesible en red local: http://10.251.57.129:${PORT}`);
         });
     } catch (error) {
         console.error('💀 Error fatal al iniciar el servicio:', error);
