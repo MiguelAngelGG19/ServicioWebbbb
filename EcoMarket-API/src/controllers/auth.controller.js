@@ -14,15 +14,28 @@ const esEmailValido = (email) => {
     return regex.test(email);
 };
 
+// ─── Helper: obtener IP real del cliente ──────────────────────────────────────
+const obtenerIP = (req) => {
+    return (
+        req.headers['x-forwarded-for']?.split(',')[0].trim() ||
+        req.headers['x-real-ip'] ||
+        req.socket?.remoteAddress ||
+        req.ip ||
+        'IP desconocida'
+    );
+};
+
 // ─────────────────────────────────────────────────────────────────────────────
 // REGISTRO
 // ─────────────────────────────────────────────────────────────────────────────
 exports.registro = async (req, res) => {
     try {
         const { nombre, email, password } = req.body;
+        const ipCliente = obtenerIP(req);
 
         // 1. Validar campos obligatorios
         if (!nombre || !email || !password) {
+            console.warn(`[registro] Campos incompletos | IP: ${ipCliente}`);
             return res.status(400).json({
                 success: false,
                 error: 'Todos los campos son obligatorios: nombre, email y contraseña.'
@@ -31,6 +44,7 @@ exports.registro = async (req, res) => {
 
         // 2. Validar formato de email
         if (!esEmailValido(email)) {
+            console.warn(`[registro] Email inválido: ${email} | IP: ${ipCliente}`);
             return res.status(400).json({
                 success: false,
                 error: 'El formato del correo electrónico no es válido.'
@@ -56,6 +70,7 @@ exports.registro = async (req, res) => {
         // 5. Verificar si el email ya está registrado
         const existeUsuario = await User.findOne({ where: { email } });
         if (existeUsuario) {
+            console.warn(`[registro] Email ya registrado: ${email} | IP: ${ipCliente}`);
             return res.status(409).json({
                 success: false,
                 error: `El correo "${email}" ya está registrado. Intenta iniciar sesión o usa otro correo.`
@@ -71,6 +86,8 @@ exports.registro = async (req, res) => {
 
         // 7. Generar token
         const token = generarToken(nuevoUsuario.id, nuevoUsuario.rol);
+
+        console.log(`[registro] ✅ Nuevo usuario: ${nuevoUsuario.email} | IP: ${ipCliente}`);
 
         return res.status(201).json({
             success: true,
@@ -99,6 +116,9 @@ exports.registro = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
+        const ipCliente = obtenerIP(req);
+
+        console.log(`[login] Intento de acceso | Email: ${email || 'no proporcionado'} | IP: ${ipCliente}`);
 
         // 1. Validar campos obligatorios
         if (!email || !password) {
@@ -119,6 +139,7 @@ exports.login = async (req, res) => {
         // 3. Buscar usuario por email
         const usuario = await User.findOne({ where: { email: email.toLowerCase().trim() } });
         if (!usuario) {
+            console.warn(`[login] ❌ Email no encontrado: ${email} | IP: ${ipCliente}`);
             return res.status(401).json({
                 success: false,
                 error: 'No existe ninguna cuenta registrada con ese correo electrónico.'
@@ -128,6 +149,7 @@ exports.login = async (req, res) => {
         // 4. Verificar contraseña
         const esCorrecto = await usuario.compararPassword(password);
         if (!esCorrecto) {
+            console.warn(`[login] ❌ Contraseña incorrecta para: ${email} | IP: ${ipCliente}`);
             return res.status(401).json({
                 success: false,
                 error: 'La contraseña es incorrecta. Verifica tus credenciales e intenta de nuevo.'
@@ -136,6 +158,8 @@ exports.login = async (req, res) => {
 
         // 5. Generar token
         const token = generarToken(usuario.id, usuario.rol);
+
+        console.log(`[login] ✅ Acceso exitoso | Usuario: ${usuario.email} | Rol: ${usuario.rol} | IP: ${ipCliente}`);
 
         return res.json({
             success: true,
@@ -146,6 +170,11 @@ exports.login = async (req, res) => {
                 nombre: usuario.nombre,
                 email: usuario.email,
                 rol: usuario.rol
+            },
+            // Opcional: devolver IP al cliente para confirmación
+            meta: {
+                ip: ipCliente,
+                fechaAcceso: new Date().toISOString()
             }
         });
 

@@ -8,6 +8,10 @@ const { sequelize, testConnection } = require('./src/config/database');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+// ── Trust Proxy: necesario para leer la IP real del cliente ──────────────────
+// Permite que req.ip y x-forwarded-for funcionen correctamente en redes locales
+app.set('trust proxy', true);
+
 // Importar Rutas
 const authRoutes = require('./src/routes/auth.routes');
 const productRoutes = require('./src/routes/product.routes');
@@ -17,11 +21,16 @@ const orderRoutes = require('./src/routes/order.routes');
 // 1. Middlewares (Configuración Global)
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
-// CORS: Permite React Web (localhost:5173) Y la app móvil (cualquier IP local 192.168.x.x)
+// CORS: Permite React Web (localhost:5173), app móvil (192.168.x.x y 10.x.x.x)
 app.use(cors({
     origin: function(origin, callback) {
-        // Permite: sin origin (Postman), localhost web, e IPs de red local
-        if (!origin || origin === 'http://localhost:5173' || /^http:\/\/192\.168\./.test(origin)) {
+        // Permite: sin origin (Postman), localhost web, red local 192.168.x.x y 10.x.x.x
+        if (
+            !origin ||
+            origin === 'http://localhost:5173' ||
+            /^http:\/\/192\.168\./.test(origin) ||
+            /^http:\/\/10\./.test(origin)
+        ) {
             callback(null, true);
         } else {
             callback(new Error('No permitido por CORS'));
@@ -55,13 +64,14 @@ const startServer = async () => {
     try {
         await testConnection();
         await sequelize.sync({ force: false });
-        console.log('\uD83D\uDCE6 Tablas sincronizadas correctamente.');
+        console.log('📦 Tablas sincronizadas correctamente.');
 
-        app.listen(PORT, () => {
-            console.log(`\uD83D\uDE80 Servidor corriendo en http://localhost:${PORT}`);
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+            console.log(`🌐 Accesible en red local: http://10.92.137.129:${PORT}`);
         });
     } catch (error) {
-        console.error('\uD83D\uDC80 Error fatal al iniciar el servicio:', error);
+        console.error('💀 Error fatal al iniciar el servicio:', error);
     }
 };
 
